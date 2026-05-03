@@ -1,9 +1,12 @@
-import '@testing-library/jest-native/extend-expect';
+jest.mock('expo/src/winter/ImportMetaRegistry', () => ({
+  ImportMetaRegistry: class ImportMetaRegistry {},
+}));
+
+jest.mock('@ungap/structured-clone', () => ({ default: (v: any) => JSON.parse(JSON.stringify(v)) }));
 
 jest.mock('expo-sqlite', () => {
-  type Row = Record<string, any>;
   function makeDb() {
-    const tables: Record<string, Row[]> = {};
+    const tables: Record<string, Record<string, any>[]> = {};
     const exec = (sql: string) => {
       const stmts = sql.split(';').map((s) => s.trim()).filter(Boolean);
       for (const stmt of stmts) {
@@ -25,7 +28,7 @@ jest.mock('expo-sqlite', () => {
         if (!m) return { changes: 0, lastInsertRowId: 0 };
         const t = m[1];
         const cols = m[2].split(',').map((c: string) => c.trim());
-        const row: Row = {};
+        const row: Record<string, any> = {};
         cols.forEach((c: string, idx: number) => (row[c] = args[idx]));
         tables[t] = tables[t] || [];
         tables[t].push(row);
@@ -39,7 +42,7 @@ jest.mock('expo-sqlite', () => {
         const wm = m[2].match(/(\w+)\s*=\s*\?/);
         if (!wm) return { changes: 0, lastInsertRowId: 0 };
         const before = tables[t].length;
-        tables[t] = tables[t].filter((r: Row) => r[wm[1]] !== args[0]);
+        tables[t] = tables[t].filter((r: Record<string, any>) => r[wm[1]] !== args[0]);
         return { changes: before - tables[t].length, lastInsertRowId: 0 };
       }
       if (/^UPDATE/i.test(s)) {
@@ -51,7 +54,7 @@ jest.mock('expo-sqlite', () => {
         const whereVal = args[args.length - 1];
         const updates = args.slice(0, sets.length);
         let changes = 0;
-        (tables[t] || []).forEach((r: Row) => {
+        (tables[t] || []).forEach((r: Record<string, any>) => {
           if (r[whereCol] === whereVal) { sets.forEach((c: string, i: number) => (r[c] = updates[i])); changes++; }
         });
         return { changes, lastInsertRowId: 0 };
@@ -63,7 +66,7 @@ jest.mock('expo-sqlite', () => {
       if (!m) return [];
       const t = m[1];
       const rows = tables[t] || [];
-      if (m[2]) return rows.filter((r: Row) => r[m[2]] === args[0]);
+      if (m[2]) return rows.filter((r: Record<string, any>) => r[m[2]] === args[0]);
       return [...rows];
     };
     const first = (sql: string, ...args: any[]) => all(sql, ...args)[0] ?? null;
