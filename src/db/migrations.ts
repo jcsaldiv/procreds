@@ -43,13 +43,13 @@ const V1 = `
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
   );
-  CREATE TABLE IF NOT EXISTS schema_version (
-    version INTEGER PRIMARY KEY
-  );
+  CREATE INDEX IF NOT EXISTS idx_credentials_profile_id ON credentials(profile_id);
+  CREATE INDEX IF NOT EXISTS idx_ce_profile_id ON ce_courses(profile_id);
+  CREATE INDEX IF NOT EXISTS idx_ce_credential_id ON ce_courses(credential_id);
+  CREATE INDEX IF NOT EXISTS idx_credentials_expiration ON credentials(expiration_date);
 `;
 
 export function runMigrations(db: SQLiteDatabase): void {
-  db.execSync('PRAGMA foreign_keys = ON;');
   db.execSync('CREATE TABLE IF NOT EXISTS schema_version (version INTEGER PRIMARY KEY);');
   const row = db.getFirstSync<{ version: number }>('SELECT version FROM schema_version LIMIT 1');
   const current = row?.version ?? 0;
