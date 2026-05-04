@@ -2,6 +2,14 @@ import type { Profile } from '../db/profiles';
 import type { Credential } from '../db/credentials';
 import { calculateStatus } from '../domain/status';
 
+function escHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 const STATUS_CSS: Record<string, string> = {
   active: '#16a34a',
   'expiring-soon': '#d97706',
@@ -12,7 +20,7 @@ const STATUS_CSS: Record<string, string> = {
 
 function labelRow(label: string, value: string | null | undefined): string {
   if (!value) return '';
-  return `<tr><td class="label">${label}</td><td>${value}</td></tr>`;
+  return `<tr><td class="label">${escHtml(label)}</td><td>${escHtml(value)}</td></tr>`;
 }
 
 export function buildCredentialReportHtml(profile: Profile, credentials: Credential[]): string {
@@ -27,7 +35,7 @@ export function buildCredentialReportHtml(profile: Profile, credentials: Credent
     return `
       <div class="card">
         <div class="card-header">
-          <span class="credential-name">${c.name}</span>
+          <span class="credential-name">${escHtml(c.name)}</span>
           <span class="status-badge" style="background:${color}">${statusLabel}</span>
         </div>
         <table>
@@ -67,8 +75,8 @@ export function buildCredentialReportHtml(profile: Profile, credentials: Credent
 </head>
 <body>
   <div class="header">
-    <div class="profile-name">${profile.name}</div>
-    ${profile.profession ? `<div class="profession">${profile.profession}</div>` : ''}
+    <div class="profile-name">${escHtml(profile.name)}</div>
+    ${profile.profession ? `<div class="profession">${escHtml(profile.profession)}</div>` : ''}
     <div class="generated">Generated ${generated}</div>
   </div>
   ${emptyMsg}
@@ -78,9 +86,9 @@ export function buildCredentialReportHtml(profile: Profile, credentials: Credent
 }
 
 export async function shareCredentialReport(profile: Profile, credentials: Credential[]): Promise<void> {
-  // @ts-ignore
+  // @ts-ignore // native module not available in Jest
   const { printToFileAsync } = await import('expo-print');
-  // @ts-ignore
+  // @ts-ignore // native module not available in Jest
   const { shareAsync } = await import('expo-sharing');
   const html = buildCredentialReportHtml(profile, credentials);
   const { uri } = await printToFileAsync({ html });

@@ -32,6 +32,7 @@ test('includes all credential fields', () => {
   expect(html).toContain('2022-01-01');
   expect(html).toContain('2026-12-31');
   expect(html).toContain('Must renew by Jan');
+  expect(html).toContain('https://nursing.texas.gov');
 });
 
 test('omits null fields from table rows', () => {
@@ -42,7 +43,7 @@ test('omits null fields from table rows', () => {
 
 test('shows empty message when no credentials', () => {
   const html = buildCredentialReportHtml(profile, []);
-  expect(html).toContain('No credentials on file');
+  expect(html).toContain('No credentials on file.');
 });
 
 test('omits profession div when null', () => {
@@ -50,7 +51,14 @@ test('omits profession div when null', () => {
   expect(html).not.toContain('Registered Nurse');
 });
 
-test('includes a status badge for each credential', () => {
-  const html = buildCredentialReportHtml(profile, [cred]);
-  expect(html).toContain('status-badge');
+test('shows Active status for a credential with a future expiration date', () => {
+  const activeCred = { ...cred, expiration_date: '2030-01-01' };
+  const html = buildCredentialReportHtml(profile, [activeCred]);
+  expect(html).toContain('Active');
+});
+
+test('shows Expired status for a credential with a past expiration date', () => {
+  const expiredCred = { ...cred, expiration_date: '2020-01-01' };
+  const html = buildCredentialReportHtml(profile, [expiredCred]);
+  expect(html).toContain('Expired');
 });

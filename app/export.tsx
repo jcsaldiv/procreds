@@ -68,7 +68,7 @@ export default function ExportScreen() {
       <Pressable
         onPress={handleExport}
         disabled={!selectedId || exporting}
-        className="bg-blue-600 py-3 rounded-lg items-center mt-4"
+        className={`bg-blue-600 py-3 rounded-lg items-center mt-4 ${(!selectedId || exporting) ? 'opacity-50' : ''}`}
       >
         {exporting ? (
           <ActivityIndicator color="white" />
