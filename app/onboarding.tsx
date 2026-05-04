@@ -3,7 +3,7 @@ import {
   View,
   Text,
   FlatList,
-  Dimensions,
+  useWindowDimensions,
   TouchableOpacity,
   TextInput,
   Alert,
@@ -40,10 +40,9 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
 export default function Onboarding() {
   const router = useRouter();
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const listRef = useRef<FlatList<Slide>>(null);
   const [page, setPage] = useState(0);
   const [step, setStep] = useState<'slides' | 'profile'>('slides');
