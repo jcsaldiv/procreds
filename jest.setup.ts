@@ -112,3 +112,32 @@ jest.mock('react-native-purchases', () => ({
 if (!('randomUUID' in ((globalThis as any).crypto ?? {}))) {
   (globalThis as any).crypto = { randomUUID: () => 'uuid-' + Math.random().toString(36).slice(2) };
 }
+
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(async () => null),
+  setItemAsync: jest.fn(async () => undefined),
+  deleteItemAsync: jest.fn(async () => undefined),
+}));
+
+jest.mock('expo-file-system/legacy', () => ({
+  readAsStringAsync: jest.fn(async () => 'base64data'),
+  copyAsync: jest.fn(async () => undefined),
+  makeDirectoryAsync: jest.fn(async () => undefined),
+  deleteAsync: jest.fn(async () => undefined),
+  getInfoAsync: jest.fn(async () => ({ exists: true })),
+  documentDirectory: 'file:///documents/',
+  EncodingType: { Base64: 'base64' },
+}));
+
+jest.mock('expo-image-picker', () => ({
+  launchCameraAsync: jest.fn(async () => ({ canceled: true, assets: [] })),
+  launchImageLibraryAsync: jest.fn(async () => ({ canceled: true, assets: [] })),
+  requestCameraPermissionsAsync: jest.fn(async () => ({ status: 'granted' })),
+  requestMediaLibraryPermissionsAsync: jest.fn(async () => ({ status: 'granted' })),
+}));
+
+jest.mock('expo-local-authentication', () => ({
+  hasHardwareAsync: jest.fn(async () => false),
+  isEnrolledAsync: jest.fn(async () => false),
+  authenticateAsync: jest.fn(async () => ({ success: false })),
+}));
