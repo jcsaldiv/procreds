@@ -44,7 +44,12 @@ export function ScanButton({ type, onResult, onError }: Props) {
       return;
     }
 
-    const uri = result.assets[0].uri;
+    const asset = result.assets?.[0];
+    if (!asset) {
+      onError?.('CANCELLED');
+      return;
+    }
+    const uri = asset.uri;
     setScanning(true);
     try {
       const fields = await scanDocument(uri, type);

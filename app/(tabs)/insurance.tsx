@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
@@ -17,6 +17,23 @@ export default function InsuranceTab() {
     useCallback(() => {
       if (activeProfileId) setRows(listInsuranceForProfile(activeProfileId));
     }, [activeProfileId])
+  );
+
+  useEffect(() => {
+    if (activeProfileId) setRows(listInsuranceForProfile(activeProfileId));
+  }, [activeProfileId]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: InsurancePolicy }) => (
+      <InsuranceRow
+        id={item.id}
+        insuranceType={item.insurance_type}
+        carrier={item.carrier}
+        expirationDate={item.expiration_date}
+        onPress={(id) => router.push(`/insurance/${id}`)}
+      />
+    ),
+    [router],
   );
 
   if (!isPro) {
@@ -53,15 +70,7 @@ export default function InsuranceTab() {
         <FlatList
           data={rows}
           keyExtractor={(r) => r.id}
-          renderItem={({ item }) => (
-            <InsuranceRow
-              id={item.id}
-              insuranceType={item.insurance_type}
-              carrier={item.carrier}
-              expirationDate={item.expiration_date}
-              onPress={(id) => router.push(`/insurance/${id}`)}
-            />
-          )}
+          renderItem={renderItem}
         />
       )}
     </View>
