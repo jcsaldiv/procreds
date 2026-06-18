@@ -5,9 +5,11 @@ import { useActiveProfile } from '@/state/activeProfile';
 import { createCredential, countCredentialsForProfile } from '@/db/credentials';
 import { FormField } from '@/components/FormField';
 import { DateField } from '@/components/DateField';
+import { ScanButton } from '@/components/ScanButton';
 import { usePro } from '@/purchases/usePro';
 import { FREE_LIMITS } from '@/constants/limits';
 import { scheduleForCredential } from '@/notifications/scheduler';
+import type { CredentialScanResult } from '@/lib/ai-scan';
 
 export default function NewCredential() {
   const router = useRouter();
@@ -20,6 +22,15 @@ export default function NewCredential() {
   const [expDate, setExpDate] = useState<string | null>(null);
   const [renewalUrl, setRenewalUrl] = useState('');
   const [notes, setNotes] = useState('');
+
+  const applyScannedFields = (result: CredentialScanResult) => {
+    if (result.name) setName(result.name);
+    if (result.issuingBody) setIssuingBody(result.issuingBody);
+    if (result.credentialNumber) setCredNum(result.credentialNumber);
+    if (result.issueDate) setIssueDate(result.issueDate);
+    if (result.expirationDate) setExpDate(result.expirationDate);
+    if (result.renewalUrl) setRenewalUrl(result.renewalUrl);
+  };
 
   const save = async () => {
     if (!activeProfileId) return;
@@ -44,6 +55,10 @@ export default function NewCredential() {
   return (
     <ScrollView className="flex-1 bg-white p-4">
       <Text className="text-2xl font-bold mb-4">New Credential</Text>
+      <ScanButton
+        type="credential"
+        onResult={(result) => applyScannedFields(result as CredentialScanResult)}
+      />
       <FormField label="Name *" value={name} onChangeText={setName} placeholder="e.g. RN License" />
       <FormField label="Issuing Body" value={issuingBody} onChangeText={setIssuingBody} />
       <FormField label="Credential Number" value={credNum} onChangeText={setCredNum} />

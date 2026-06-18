@@ -8,6 +8,8 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { CeRow } from '@/components/CeRow';
 import { usePro } from '@/purchases/usePro';
 import { cancelForCredential } from '@/notifications/scheduler';
+import { getSetting } from '@/db/settings';
+import { authenticate } from '@/lib/biometrics';
 
 export default function CredentialDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -26,7 +28,12 @@ export default function CredentialDetail() {
   if (!cred) return null;
   const status = calculateStatus(cred.expiration_date);
 
-  const onDelete = () => {
+  const onDelete = async () => {
+    const bioEnabled = getSetting('biometrics_enabled') === 'true';
+    if (bioEnabled) {
+      const ok = await authenticate('Confirm delete credential');
+      if (!ok) { Alert.alert('Authentication required'); return; }
+    }
     Alert.alert('Delete credential?', 'This will also remove its CE entries from this credential.', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: async () => {

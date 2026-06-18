@@ -5,6 +5,8 @@ import { listProfiles, getProfile, type Profile } from '@/db/profiles';
 import { listCredentialsForProfile } from '@/db/credentials';
 import { usePro } from '@/purchases/usePro';
 import { shareCredentialReport } from '@/lib/export';
+import { getSetting } from '@/db/settings';
+import { authenticate } from '@/lib/biometrics';
 
 export default function ExportScreen() {
   const router = useRouter();
@@ -25,6 +27,11 @@ export default function ExportScreen() {
 
   const handleExport = async () => {
     if (!selectedId) return;
+    const bioEnabled = getSetting('biometrics_enabled') === 'true';
+    if (bioEnabled) {
+      const ok = await authenticate('Confirm data export');
+      if (!ok) { Alert.alert('Authentication required'); return; }
+    }
     const profile = getProfile(selectedId);
     if (!profile) return;
     const credentials = listCredentialsForProfile(selectedId);
