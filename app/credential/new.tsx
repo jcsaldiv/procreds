@@ -33,28 +33,35 @@ export default function NewCredential() {
   };
 
   const save = async () => {
-    if (!activeProfileId) return;
-    if (!name.trim()) return Alert.alert('Name is required');
+    if (!activeProfileId) {
+      Alert.alert('No profile', 'Please create a profile before adding credentials.');
+      return;
+    }
+    if (!name.trim()) { Alert.alert('Name is required'); return; }
     if (!isPro && countCredentialsForProfile(activeProfileId) >= FREE_LIMITS.MAX_CREDENTIALS) {
       return router.push('/paywall');
     }
-    const c = createCredential({
-      profile_id: activeProfileId,
-      name: name.trim(),
-      issuing_body: issuingBody || null,
-      credential_number: credNum || null,
-      issue_date: issueDate,
-      expiration_date: expDate,
-      renewal_url: renewalUrl || null,
-      notes: notes || null,
-    });
-    await scheduleForCredential(c, isPro);
-    router.back();
+    try {
+      const c = createCredential({
+        profile_id: activeProfileId,
+        name: name.trim(),
+        issuing_body: issuingBody || null,
+        credential_number: credNum || null,
+        issue_date: issueDate,
+        expiration_date: expDate,
+        renewal_url: renewalUrl || null,
+        notes: notes || null,
+      });
+      await scheduleForCredential(c, isPro);
+      router.back();
+    } catch (e: any) {
+      Alert.alert('Could not save', String(e?.message ?? e));
+    }
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      <Text className="text-2xl font-bold mb-4">New Credential</Text>
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 380 }}>
+      <Text className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">New Credential</Text>
       <ScanButton
         type="credential"
         onResult={(result) => applyScannedFields(result as CredentialScanResult)}
@@ -68,6 +75,9 @@ export default function NewCredential() {
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
       <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
         <Text className="text-white font-semibold text-base">Save</Text>
+      </Pressable>
+      <Pressable onPress={() => router.back()} className="py-3 rounded-lg items-center mt-2">
+        <Text className="text-gray-500 dark:text-slate-400 font-semibold text-base">Cancel</Text>
       </Pressable>
     </ScrollView>
   );

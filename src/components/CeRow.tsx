@@ -3,10 +3,10 @@ import type { CeCourse } from '../db/ce';
 
 export function CeRow({ item, onPress }: { item: CeCourse; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} className="p-3 border-b border-gray-200 flex-row justify-between">
+    <Pressable onPress={onPress} className="p-3 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-row justify-between">
       <View className="flex-1">
-        <Text className="font-semibold">{item.course_name}</Text>
-        <Text className="text-xs text-gray-500">
+        <Text className="font-semibold text-gray-900 dark:text-white">{item.course_name}</Text>
+        <Text className="text-xs text-gray-500 dark:text-slate-400">
           {item.organization ?? '—'} · {item.date_completed}
         </Text>
       </View>

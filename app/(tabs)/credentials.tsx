@@ -1,26 +1,52 @@
 import { useCallback, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter, useLocalSearchParams } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { listCredentialsForProfile, type Credential } from '@/db/credentials';
+import { calculateStatus } from '@/domain/status';
 import { CredentialRow } from '@/components/CredentialRow';
 import { EmptyState } from '@/components/EmptyState';
 import { usePro } from '@/purchases/usePro';
+
+const FILTER_LABELS: Record<string, string> = {
+  'expiring-soon': 'Expiring Soon',
+  'expiring': 'Expiring',
+  'expired': 'Expired',
+};
 
 export default function CredentialsList() {
   const router = useRouter();
   const isPro = usePro();
   const { activeProfileId } = useActiveProfile();
+  const { filter } = useLocalSearchParams<{ filter?: string }>();
   const [rows, setRows] = useState<Credential[]>([]);
+
   const refresh = useCallback(() => {
     if (activeProfileId) setRows(listCredentialsForProfile(activeProfileId));
   }, [activeProfileId]);
   useFocusEffect(useCallback(() => { refresh(); }, [refresh]));
 
+  const filtered = filter
+    ? rows.filter((r) => {
+        const s = calculateStatus(r.expiration_date);
+        if (filter === 'expiring') return s === 'expiring' || s === 'expiring-soon';
+        return s === filter;
+      })
+    : rows;
+
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-white dark:bg-slate-900">
       <View className="flex-row justify-between items-center p-4">
-        <Text className="text-2xl font-bold">Credentials</Text>
+        <View>
+          <Text className="text-2xl font-bold text-slate-900 dark:text-white">Credentials</Text>
+          {filter ? (
+            <Pressable onPress={() => router.setParams({ filter: '' })} className="flex-row items-center mt-0.5">
+              <Text className="text-xs text-blue-600">
+                {FILTER_LABELS[filter] ?? filter} ✕ clear filter
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
         <View className="flex-row gap-2">
           {isPro && (
             <Pressable
@@ -38,14 +64,14 @@ export default function CredentialsList() {
           </Pressable>
         </View>
       </View>
-      {rows.length === 0 ? (
+      {filtered.length === 0 ? (
         <EmptyState
-          title="No credentials yet"
-          body="Tap + Add to track your first license or certification."
+          title={filter ? `No ${FILTER_LABELS[filter] ?? filter} credentials` : 'No credentials yet'}
+          body={filter ? 'Try clearing the filter.' : 'Tap + Add to track your first license or certification.'}
         />
       ) : (
         <FlatList
-          data={rows}
+          data={filtered}
           keyExtractor={(r) => r.id}
           renderItem={({ item }) => (
             <CredentialRow

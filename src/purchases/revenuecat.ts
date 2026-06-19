@@ -2,9 +2,8 @@ import Purchases, { type CustomerInfo } from 'react-native-purchases';
 import { Platform } from 'react-native';
 
 // RevenueCat product IDs:
-//   - subscription:  pro_annual
-//   - one-time:      pro_lifetime
-//   - entitlement:   pro
+//   - one-time:    pro_lifetime
+//   - entitlement: pro
 const IOS_KEY = process.env.EXPO_PUBLIC_RC_IOS_KEY ?? '';
 const ANDROID_KEY = process.env.EXPO_PUBLIC_RC_ANDROID_KEY ?? '';
 
@@ -28,8 +27,12 @@ export async function isProActive(): Promise<boolean> {
   return Boolean(info.entitlements.active[ENTITLEMENT_ID]);
 }
 
-export async function getOfferings() {
-  return Purchases.getOfferings();
+export async function getLifetimePackage(): Promise<any | null> {
+  const offerings = await Purchases.getOfferings();
+  const packages = offerings?.current?.availablePackages ?? [];
+  return packages.find((p: any) =>
+    p.packageType === 'LIFETIME' || p.product?.identifier === 'pro_lifetime'
+  ) ?? packages[0] ?? null;
 }
 
 export async function purchasePackageAndCheck(pkg: any): Promise<boolean> {

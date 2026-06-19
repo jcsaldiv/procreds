@@ -49,7 +49,7 @@ export default function EditCredential() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
+    <ScrollView className="flex-1 bg-white p-4" contentContainerStyle={{ paddingBottom: 380 }}>
       <Text className="text-2xl font-bold mb-4">Edit Credential</Text>
       <FormField label="Name *" value={name} onChangeText={setName} />
       <FormField label="Issuing Body" value={issuingBody} onChangeText={setIssuingBody} />
@@ -60,6 +60,9 @@ export default function EditCredential() {
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
       <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
         <Text className="text-white font-semibold text-base">Save</Text>
+      </Pressable>
+      <Pressable onPress={() => router.back()} className="py-3 rounded-lg items-center mt-2">
+        <Text className="text-gray-500 font-semibold text-base">Cancel</Text>
       </Pressable>
     </ScrollView>
   );

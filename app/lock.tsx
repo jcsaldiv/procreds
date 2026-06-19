@@ -29,9 +29,9 @@ export default function LockScreen({ onUnlock }: Props) {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-white items-center justify-center p-8">
-      <Text className="text-3xl font-bold text-gray-900 mb-2">ProCreds</Text>
-      <Text className="text-gray-500 mb-12">Your credentials are locked.</Text>
+    <SafeAreaView className="flex-1 bg-white dark:bg-slate-900 items-center justify-center p-8">
+      <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-2">ProCreds</Text>
+      <Text className="text-gray-500 dark:text-slate-400 mb-12">Your credentials are locked.</Text>
 
       {authenticating ? (
         <ActivityIndicator size="large" color="#2563EB" />

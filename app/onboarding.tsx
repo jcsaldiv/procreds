@@ -9,11 +9,13 @@ import {
   Alert,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  useColorScheme,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createProfile } from '@/db/profiles';
 import { setSetting } from '@/db/settings';
+import { useActiveProfile } from '@/state/activeProfile';
 
 type Slide = { key: string; title: string; body: string };
 
@@ -42,6 +44,7 @@ const SLIDES: Slide[] = [
 
 export default function Onboarding() {
   const router = useRouter();
+  const isDark = useColorScheme() === 'dark';
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const listRef = useRef<FlatList<Slide>>(null);
   const [page, setPage] = useState(0);
@@ -49,6 +52,7 @@ export default function Onboarding() {
   const [name, setName] = useState('');
   const [profession, setProfession] = useState('');
   const [saving, setSaving] = useState(false);
+  const { setActiveProfileId } = useActiveProfile();
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const x = e.nativeEvent.contentOffset.x;
@@ -74,7 +78,8 @@ export default function Onboarding() {
     }
     setSaving(true);
     try {
-      createProfile({ name: trimmed, profession: profession.trim() || undefined });
+      const profile = createProfile({ name: trimmed, profession: profession.trim() || undefined });
+      setActiveProfileId(profile.id);
       setSetting('onboarding_complete', 'true');
       router.replace('/(tabs)');
     } catch (err) {
@@ -85,32 +90,34 @@ export default function Onboarding() {
 
   if (step === 'profile') {
     return (
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white dark:bg-slate-900">
         <View className="flex-1 px-6 pt-12">
-          <Text className="text-3xl font-bold text-slate-900">Create your profile</Text>
-          <Text className="mt-2 text-base text-slate-600">
+          <Text className="text-3xl font-bold text-slate-900 dark:text-white">Create your profile</Text>
+          <Text className="mt-2 text-base text-slate-600 dark:text-slate-400">
             We use this to label your credentials. You can edit it later in Settings.
           </Text>
 
           <View className="mt-8">
-            <Text className="text-sm font-semibold text-slate-700">Name</Text>
+            <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">Name</Text>
             <TextInput
               value={name}
               onChangeText={setName}
               placeholder="Your full name"
+              placeholderTextColor={isDark ? '#64748b' : '#9ca3af'}
               autoCapitalize="words"
-              className="mt-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900"
+              className="mt-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-base text-slate-900 dark:text-white"
             />
           </View>
 
           <View className="mt-5">
-            <Text className="text-sm font-semibold text-slate-700">Profession (optional)</Text>
+            <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">Profession (optional)</Text>
             <TextInput
               value={profession}
               onChangeText={setProfession}
               placeholder="e.g. Registered Nurse"
+              placeholderTextColor={isDark ? '#64748b' : '#9ca3af'}
               autoCapitalize="words"
-              className="mt-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900"
+              className="mt-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-base text-slate-900 dark:text-white"
             />
           </View>
         </View>
@@ -131,7 +138,7 @@ export default function Onboarding() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white dark:bg-slate-900">
       <FlatList
         ref={listRef}
         data={SLIDES}
@@ -143,8 +150,8 @@ export default function Onboarding() {
         scrollEventThrottle={16}
         renderItem={({ item }) => (
           <View style={{ width: SCREEN_WIDTH }} className="flex-1 items-center justify-center px-8">
-            <Text className="text-center text-3xl font-bold text-slate-900">{item.title}</Text>
-            <Text className="mt-4 text-center text-base text-slate-600">{item.body}</Text>
+            <Text className="text-center text-3xl font-bold text-slate-900 dark:text-white">{item.title}</Text>
+            <Text className="mt-4 text-center text-base text-slate-600 dark:text-slate-400">{item.body}</Text>
           </View>
         )}
       />
@@ -153,14 +160,14 @@ export default function Onboarding() {
         {SLIDES.map((s, i) => (
           <View
             key={s.key}
-            className={`mx-1 h-2 w-2 rounded-full ${i === page ? 'bg-blue-600' : 'bg-slate-300'}`}
+            className={`mx-1 h-2 w-2 rounded-full ${i === page ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'}`}
           />
         ))}
       </View>
 
       <View className="flex-row items-center justify-between px-6 pb-8 pt-4">
         <TouchableOpacity onPress={() => setStep('profile')}>
-          <Text className="text-base text-slate-500">Skip</Text>
+          <Text className="text-base text-slate-500 dark:text-slate-400">Skip</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={goNext} className="rounded-xl bg-blue-600 px-6 py-3">
           <Text className="text-base font-semibold text-white">

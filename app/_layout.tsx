@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppState, Appearance, type AppStateStatus } from 'react-native';
+import { AppState, Appearance, useColorScheme, type AppStateStatus } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Stack, useRouter } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { runMigrations } from '@/db/migrations';
 import { getDb } from '@/db/client';
 import { initRevenueCat } from '@/purchases/revenuecat';
@@ -38,8 +38,10 @@ async function recordSqliteDirExists() {
   }
 }
 
-export default function RootLayout() {
+function RootLayoutInner() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
   const [locked, setLocked] = useState(false);
   const backgroundedAt = useRef<number | null>(null);
 
@@ -86,16 +88,19 @@ export default function RootLayout() {
   }, [router]);
 
   if (locked) {
-    return (
-      <SafeAreaProvider>
-        <LockScreen onUnlock={() => setLocked(false)} />
-      </SafeAreaProvider>
-    );
+    return <LockScreen onUnlock={() => setLocked(false)} />;
   }
 
+  const bg = colorScheme === 'dark' ? '#0f172a' : '#ffffff';
+  return (
+    <Stack screenOptions={{ headerShown: false, contentStyle: { paddingTop: insets.top, backgroundColor: bg } }} />
+  );
+}
+
+export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false }} />
+      <RootLayoutInner />
     </SafeAreaProvider>
   );
 }

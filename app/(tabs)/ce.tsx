@@ -19,8 +19,8 @@ export default function CeTab() {
 
   if (!isPro) {
     return (
-      <View className="flex-1 items-center justify-center p-6 bg-white">
-        <Text className="text-xl font-bold mb-2">CE tracking is a Pro feature</Text>
+      <View className="flex-1 items-center justify-center p-6 bg-white dark:bg-slate-900">
+        <Text className="text-xl font-bold mb-2 text-slate-900 dark:text-white">CE tracking is a Pro feature</Text>
         <Pressable onPress={() => router.push('/paywall')} className="bg-blue-600 px-4 py-2 rounded-lg mt-4">
           <Text className="text-white font-semibold">Upgrade to Pro</Text>
         </Pressable>
@@ -30,10 +30,10 @@ export default function CeTab() {
 
   const total = sumCeHours(rows);
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-white dark:bg-slate-900">
       <View className="p-4">
-        <Text className="text-2xl font-bold">CE Hours</Text>
-        <Text className="text-gray-600 mt-1">Total: {total} hrs</Text>
+        <Text className="text-2xl font-bold text-slate-900 dark:text-white">CE Hours</Text>
+        <Text className="text-gray-600 dark:text-slate-400 mt-1">Total: {total} hrs</Text>
       </View>
       {rows.length === 0 ? (
         <EmptyState title="No CE logged yet" body="Open a credential and tap + Log CE." />
