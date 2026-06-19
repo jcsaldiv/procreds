@@ -16,11 +16,10 @@
   },
   "submit": {
     "production": {
-      "_comment": "See SETUP.md section 'EAS Submit Fields' for where to find each value.",
       "ios": {
-        "appleId": "REPLACE_ME_APPLE_ID_EMAIL",
-        "ascAppId": "REPLACE_ME_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "REPLACE_ME_APPLE_TEAM_ID"
+        "appleId": "jcsaldiv@gmail.com",
+        "ascAppId": "6781920907",
+        "appleTeamId": "H2335WZULP"
       },
       "android": {
         "serviceAccountKeyPath": "./play-service-account.json",
