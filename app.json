@@ -53,7 +53,15 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "ProCreds uses your camera to scan insurance cards and CE certificates so it can automatically fill in policy numbers, expiration dates, and other credential details for you.",
+          "microphonePermission": false,
+          "photosPermission": "ProCreds accesses your photo library so you can attach an existing photo of an insurance card or CE certificate to a credential record."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
