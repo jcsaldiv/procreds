@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getCredential, updateCredential } from '@/db/credentials';
 import { FormField } from '@/components/FormField';
@@ -13,6 +14,7 @@ export default function EditCredential() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isPro = usePro();
+  const tabletStyle = useTabletStyle();
   const [name, setName] = useState('');
   const [issuingBody, setIssuingBody] = useState('');
   const [credNum, setCredNum] = useState('');
@@ -52,6 +54,7 @@ export default function EditCredential() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 380 }}>
+      <View style={tabletStyle}>
       <Header title="Edit Credential" onBack={() => router.back()} className="mb-4" />
       <FormField label="Name *" value={name} onChangeText={setName} />
       <FormField label="Issuing Body" value={issuingBody} onChangeText={setIssuingBody} />
@@ -61,6 +64,7 @@ export default function EditCredential() {
       <FormField label="Renewal URL" value={renewalUrl} onChangeText={setRenewalUrl} keyboardType="url" />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
       <Button onPress={save} label="Save" className="mt-2" />
+      </View>
     </ScrollView>
   );
 }

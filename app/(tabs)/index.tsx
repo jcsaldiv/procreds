@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View, useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useRouter } from 'expo-router';
 import { format, parseISO, differenceInDays } from 'date-fns';
 import { useActiveProfile } from '@/state/activeProfile';
@@ -39,6 +40,7 @@ export default function Dashboard() {
   const { activeProfileId, hydrate } = useActiveProfile();
   const isPro = usePro();
   const isDark = useColorScheme() === 'dark';
+  const tabletStyle = useTabletStyle();
   const [counts, setCounts] = useState({ total: 0, expiring: 0, expired: 0 });
   const [insuranceCounts, setInsuranceCounts] = useState({ active: 0, expiring: 0 });
   const [upcoming, setUpcoming] = useState<UpcomingItem[]>([]);
@@ -86,6 +88,7 @@ export default function Dashboard() {
 
   return (
     <ScrollView className="flex-1 bg-slate-50 dark:bg-slate-950" contentContainerStyle={{ paddingBottom: 24 }}>
+      <View style={tabletStyle}>
       <View className="p-4 bg-white dark:bg-slate-900"><ProfilePicker /></View>
 
       <Text className="text-2xl font-bold px-4 pt-4 pb-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Overview</Text>
@@ -175,6 +178,7 @@ export default function Dashboard() {
             <Text className="text-slate-300 dark:text-slate-600">›</Text>
           </Pressable>
         ) : null}
+      </View>
       </View>
     </ScrollView>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getCe, updateCe, deleteCe } from '@/db/ce';
 import { FormField } from '@/components/FormField';
@@ -10,6 +11,7 @@ import { DateField } from '@/components/DateField';
 export default function EditCe() {
   const { ceId } = useLocalSearchParams<{ ceId: string }>();
   const router = useRouter();
+  const tabletStyle = useTabletStyle();
   const [course, setCourse] = useState('');
   const [org, setOrg] = useState('');
   const [date, setDate] = useState<string | null>(null);
@@ -51,6 +53,7 @@ export default function EditCe() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <View style={tabletStyle}>
       <Header title="Edit CE" onBack={() => router.back()} className="mb-4" />
       <FormField label="Course Name *" value={course} onChangeText={setCourse} />
       <FormField label="Organization" value={org} onChangeText={setOrg} />
@@ -61,6 +64,7 @@ export default function EditCe() {
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
       <Button onPress={save} label="Save" className="mt-2" />
       <Button onPress={onDelete} label="Delete" variant="destructive" className="mt-2" />
+      </View>
     </ScrollView>
   );
 }

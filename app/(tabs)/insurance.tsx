@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
+import { useIsTablet, useTabletStyle } from '@/hooks/useIsTablet';
 import { Button } from '@/components/Button';
 import { useFocusEffect, useRouter, useLocalSearchParams } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
@@ -15,6 +16,7 @@ export default function InsuranceTab() {
   const { activeProfileId } = useActiveProfile();
   const { filter } = useLocalSearchParams<{ filter?: string }>();
   const [rows, setRows] = useState<InsurancePolicy[]>([]);
+  const tabletStyle = useTabletStyle();
 
   useFocusEffect(
     useCallback(() => {
@@ -45,7 +47,8 @@ export default function InsuranceTab() {
   }
 
   return (
-    <View className="flex-1 bg-white dark:bg-slate-900">
+    <View className="flex-1 bg-white dark:bg-slate-900 items-center">
+      <View className="flex-1 w-full" style={tabletStyle}>
       <View className="flex-row justify-between items-center p-4">
         <View>
           <Text className="text-2xl font-bold text-slate-900 dark:text-white">Insurance</Text>
@@ -73,6 +76,7 @@ export default function InsuranceTab() {
           />
         )} />
       )}
+      </View>
     </View>
   );
 }

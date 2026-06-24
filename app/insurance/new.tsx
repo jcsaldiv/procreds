@@ -3,6 +3,7 @@ import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useActiveProfile } from '@/state/activeProfile';
@@ -19,6 +20,7 @@ const INSURANCE_TYPES = ['Malpractice', 'General Liability', 'Health/Benefits', 
 export default function NewInsurance() {
   const router = useRouter();
   const isPro = usePro();
+  const tabletStyle = useTabletStyle();
   const { activeProfileId } = useActiveProfile();
 
   const [insuranceType, setInsuranceType] = useState('');
@@ -95,6 +97,7 @@ export default function NewInsurance() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <View style={tabletStyle}>
       <Header title="New Insurance Policy" onBack={() => router.back()} className="mb-4" />
 
       <ScanButton
@@ -137,6 +140,7 @@ export default function NewInsurance() {
       ) : null}
 
       <Button onPress={save} label="Save Policy" className="mt-2" />
+      </View>
     </ScrollView>
   );
 }

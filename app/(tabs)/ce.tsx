@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
+import { useIsTablet, useTabletStyle } from '@/hooks/useIsTablet';
 import { Button } from '@/components/Button';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
@@ -14,6 +15,7 @@ export default function CeTab() {
   const isPro = usePro();
   const { activeProfileId } = useActiveProfile();
   const [rows, setRows] = useState<CeCourse[]>([]);
+  const tabletStyle = useTabletStyle();
   useFocusEffect(useCallback(() => {
     if (activeProfileId) setRows(listCeForProfile(activeProfileId));
   }, [activeProfileId]));
@@ -29,7 +31,8 @@ export default function CeTab() {
 
   const total = sumCeHours(rows);
   return (
-    <View className="flex-1 bg-white dark:bg-slate-900">
+    <View className="flex-1 bg-white dark:bg-slate-900 items-center">
+      <View className="flex-1 w-full" style={tabletStyle}>
       <View className="p-4">
         <Text className="text-2xl font-bold text-slate-900 dark:text-white">CE Hours</Text>
         <Text className="text-slate-600 dark:text-slate-400 mt-1">Total: {total} hrs</Text>
@@ -45,6 +48,7 @@ export default function CeTab() {
           )}
         />
       )}
+      </View>
     </View>
   );
 }

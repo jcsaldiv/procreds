@@ -3,6 +3,7 @@ import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { LoadingState } from '@/components/LoadingState';
 import { EmptyState } from '@/components/EmptyState';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -16,6 +17,7 @@ import { authenticate } from '@/lib/biometrics';
 
 export default function InsuranceDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const tabletStyle = useTabletStyle();
   const router = useRouter();
   const [policy, setPolicy] = useState<InsurancePolicy | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,6 +71,7 @@ export default function InsuranceDetail() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <View style={tabletStyle}>
       <Header title={policy.insurance_type} onBack={() => router.back()} right={<StatusBadge status={status} />} className="mb-2" />
 
       {policy.carrier ? <Text className="text-slate-600 dark:text-slate-400">{policy.carrier}</Text> : null}
@@ -90,6 +93,7 @@ export default function InsuranceDetail() {
       <View className="flex-row gap-3 mt-6">
         <Button onPress={() => router.push(`/insurance/${policy.id}/edit`)} label="Edit" variant="secondary" size="md" flex />
         <Button onPress={onDelete} label="Delete" variant="destructive" size="md" flex />
+      </View>
       </View>
     </ScrollView>
   );

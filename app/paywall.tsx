@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { Button } from '@/components/Button';
 import { useRouter } from 'expo-router';
 import { getLifetimePackage, purchasePackageAndCheck, restoreAndCheck } from '@/purchases/revenuecat';
@@ -19,6 +20,7 @@ export default function Paywall() {
   const [loading, setLoading] = useState(true);
   const [pkg, setPkg] = useState<any>(null);
   const [buying, setBuying] = useState(false);
+  const tabletStyle = useTabletStyle();
 
   useEffect(() => {
     getLifetimePackage()
@@ -51,6 +53,7 @@ export default function Paywall() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900" contentContainerStyle={{ paddingBottom: 40 }}>
+      <View style={tabletStyle}>
       {/* Header */}
       <View className="bg-blue-600 px-6 pt-12 pb-8">
         <Text className="text-4xl font-bold text-white">ProCreds Pro</Text>
@@ -92,6 +95,7 @@ export default function Paywall() {
       <Pressable onPress={() => router.back()} className="mt-3 items-center">
         <Text className="text-slate-400 dark:text-slate-500 text-sm">Maybe later</Text>
       </Pressable>
+      </View>
     </ScrollView>
   );
 }

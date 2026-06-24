@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { LoadingState } from '@/components/LoadingState';
 import { EmptyState } from '@/components/EmptyState';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -21,6 +22,7 @@ export default function CredentialDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isPro = usePro();
+  const tabletStyle = useTabletStyle();
   const [cred, setCred] = useState<Credential | null>(null);
   const [ces, setCes] = useState<CeCourse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,6 +66,7 @@ export default function CredentialDetail() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <View style={tabletStyle}>
       <Header title={cred.name} onBack={() => router.back()} right={<StatusBadge status={status} />} className="mb-2" />
       {cred.issuing_body ? <Text className="text-slate-600 dark:text-slate-400 mt-1">{cred.issuing_body}</Text> : null}
       {cred.credential_number ? <Text className="text-slate-500 dark:text-slate-400 mt-1">#{cred.credential_number}</Text> : null}
@@ -101,6 +104,7 @@ export default function CredentialDetail() {
         <CeRow key={c.id} item={c} onPress={() => router.push(`/credential/${cred.id}/ce/${c.id}`)} />
       ))}
       {ces.length === 0 ? <Text className="text-slate-500 dark:text-slate-500 mt-2">No CE logged yet.</Text> : null}
+      </View>
     </ScrollView>
   );
 }

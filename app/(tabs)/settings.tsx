@@ -11,6 +11,7 @@ import {
   Pressable,
   useColorScheme,
 } from 'react-native';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import * as Notifications from 'expo-notifications';
 import * as SecureStore from 'expo-secure-store';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -45,6 +46,7 @@ function applyTheme(mode: ThemeMode) {
 export default function Settings() {
   const router = useRouter();
   const isDark = useColorScheme() === 'dark';
+  const tabletStyle = useTabletStyle();
   const [theme, setTheme] = useState<ThemeMode>('system');
   const [notifEnabled, setNotifEnabled] = useState(true);
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -173,6 +175,7 @@ export default function Settings() {
   return (
     <View className="flex-1 bg-slate-50 dark:bg-slate-950">
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+        <View style={tabletStyle}>
         <View className="px-5 pt-6 pb-4">
           <Text className="text-2xl font-bold text-slate-900 dark:text-white">Settings</Text>
         </View>
@@ -354,6 +357,7 @@ export default function Settings() {
             </Text>
           </TouchableOpacity>
         </Section>
+        </View>
       </ScrollView>
     </View>
   );

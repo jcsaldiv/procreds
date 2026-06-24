@@ -3,6 +3,7 @@ import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system/legacy';
 import { getInsurance, updateInsurance } from '@/db/insurance';
@@ -18,6 +19,7 @@ const INSURANCE_TYPES = ['Malpractice', 'General Liability', 'Health/Benefits', 
 export default function EditInsurance() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const tabletStyle = useTabletStyle();
   const isPro = usePro();
 
   const [insuranceType, setInsuranceType] = useState('');
@@ -109,6 +111,7 @@ export default function EditInsurance() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <View style={tabletStyle}>
       <Header title="Edit Insurance Policy" onBack={() => router.back()} className="mb-4" />
 
       <ScanButton
@@ -157,6 +160,7 @@ export default function EditInsurance() {
       ) : null}
 
       <Button onPress={save} label="Save" className="mt-2" />
+      </View>
     </ScrollView>
   );
 }

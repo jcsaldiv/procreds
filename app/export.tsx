@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useRouter } from 'expo-router';
 import { listProfiles, getProfile, type Profile } from '@/db/profiles';
 import { listCredentialsForProfile } from '@/db/credentials';
@@ -16,6 +17,7 @@ export default function ExportScreen() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const tabletStyle = useTabletStyle();
 
   useEffect(() => {
     const all = listProfiles();
@@ -65,6 +67,7 @@ export default function ExportScreen() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-6">
+      <View style={tabletStyle}>
       <Text className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Export Credentials</Text>
       <Text className="text-slate-600 dark:text-slate-400 mb-6">
         Select a profile and export a PDF you can share with employers or attach to applications.
@@ -99,6 +102,7 @@ export default function ExportScreen() {
       <Pressable onPress={() => router.back()} className="mt-3 items-center">
         <Text className="text-slate-500 dark:text-slate-400">Cancel</Text>
       </Pressable>
+      </View>
     </ScrollView>
   );
 }

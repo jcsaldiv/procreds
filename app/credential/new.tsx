@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { createCredential, countCredentialsForProfile } from '@/db/credentials';
@@ -16,6 +17,7 @@ import type { CredentialScanResult } from '@/lib/ai-scan';
 export default function NewCredential() {
   const router = useRouter();
   const { activeProfileId } = useActiveProfile();
+  const tabletStyle = useTabletStyle();
   const isPro = usePro();
   const [name, setName] = useState('');
   const [issuingBody, setIssuingBody] = useState('');
@@ -63,6 +65,7 @@ export default function NewCredential() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 380 }}>
+      <View style={tabletStyle}>
       <Header title="New Credential" onBack={() => router.back()} className="mb-4" />
       <ScanButton
         type="credential"
@@ -76,6 +79,7 @@ export default function NewCredential() {
       <FormField label="Renewal URL" value={renewalUrl} onChangeText={setRenewalUrl} keyboardType="url" />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
       <Button onPress={save} label="Save" className="mt-2" />
+      </View>
     </ScrollView>
   );
 }

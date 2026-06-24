@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
+import { useTabletStyle } from '@/hooks/useIsTablet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { createCe } from '@/db/ce';
@@ -15,6 +16,7 @@ export default function NewCe() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { activeProfileId } = useActiveProfile();
+  const tabletStyle = useTabletStyle();
   const isPro = usePro();
   const [course, setCourse] = useState('');
   const [org, setOrg] = useState('');
@@ -55,6 +57,7 @@ export default function NewCe() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <View style={tabletStyle}>
       <Header title="Log CE" onBack={() => router.back()} className="mb-4" />
       <ScanButton
         type="ce"
@@ -68,6 +71,7 @@ export default function NewCe() {
       <FormField label="Certificate #" value={certNum} onChangeText={setCertNum} />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
       <Button onPress={save} label="Save" className="mt-2" />
+      </View>
     </ScrollView>
   );
 }
