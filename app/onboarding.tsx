@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
   useColorScheme,
@@ -91,48 +94,58 @@ export default function Onboarding() {
   if (step === 'profile') {
     return (
       <SafeAreaView className="flex-1 bg-white dark:bg-slate-900">
-        <View className="flex-1 px-6 pt-12">
-          <Text className="text-3xl font-bold text-slate-900 dark:text-white">Create your profile</Text>
-          <Text className="mt-2 text-base text-slate-600 dark:text-slate-400">
-            We use this to label your credentials. You can edit it later in Settings.
-          </Text>
-
-          <View className="mt-8">
-            <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">Name</Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="Your full name"
-              placeholderTextColor={isDark ? '#64748b' : '#9ca3af'}
-              autoCapitalize="words"
-              className="mt-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-base text-slate-900 dark:text-white"
-            />
-          </View>
-
-          <View className="mt-5">
-            <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">Profession (optional)</Text>
-            <TextInput
-              value={profession}
-              onChangeText={setProfession}
-              placeholder="e.g. Registered Nurse"
-              placeholderTextColor={isDark ? '#64748b' : '#9ca3af'}
-              autoCapitalize="words"
-              className="mt-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-base text-slate-900 dark:text-white"
-            />
-          </View>
-        </View>
-
-        <View className="px-6 pb-8">
-          <TouchableOpacity
-            disabled={saving}
-            onPress={finish}
-            className={`rounded-xl py-4 ${saving ? 'bg-blue-300' : 'bg-blue-600'}`}
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
+            keyboardShouldPersistTaps="handled"
           >
-            <Text className="text-center text-base font-semibold text-white">
-              {saving ? 'Creating…' : 'Get started'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <View className="px-6 pt-12">
+              <Text className="text-3xl font-bold text-slate-900 dark:text-white">Create your profile</Text>
+              <Text className="mt-2 text-base text-slate-600 dark:text-slate-400">
+                We use this to label your credentials. You can edit it later in Settings.
+              </Text>
+
+              <View className="mt-8">
+                <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">Name</Text>
+                <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Your full name"
+                  placeholderTextColor={isDark ? '#64748b' : '#9ca3af'}
+                  autoCapitalize="words"
+                  returnKeyType="next"
+                  className="mt-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-base text-slate-900 dark:text-white"
+                />
+              </View>
+
+              <View className="mt-5">
+                <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">Profession (optional)</Text>
+                <TextInput
+                  value={profession}
+                  onChangeText={setProfession}
+                  placeholder="e.g. Registered Nurse"
+                  placeholderTextColor={isDark ? '#64748b' : '#9ca3af'}
+                  autoCapitalize="words"
+                  returnKeyType="done"
+                  onSubmitEditing={finish}
+                  className="mt-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-base text-slate-900 dark:text-white"
+                />
+              </View>
+            </View>
+
+            <View className="px-6 pb-8 pt-6">
+              <TouchableOpacity
+                disabled={saving}
+                onPress={finish}
+                className={`rounded-xl py-4 ${saving ? 'bg-blue-300' : 'bg-blue-600'}`}
+              >
+                <Text className="text-center text-base font-semibold text-white">
+                  {saving ? 'Creating…' : 'Get started'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }

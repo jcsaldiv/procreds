@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
 import { useTabletStyle } from '@/hooks/useIsTablet';
@@ -56,7 +56,8 @@ export default function NewCe() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <View style={tabletStyle}>
       <Header title="Log CE" onBack={() => router.back()} className="mb-4" />
       <ScanButton
@@ -73,5 +74,6 @@ export default function NewCe() {
       <Button onPress={save} label="Save" className="mt-2" />
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

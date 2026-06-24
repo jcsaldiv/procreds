@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
@@ -110,7 +110,8 @@ export default function EditInsurance() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <View style={tabletStyle}>
       <Header title="Edit Insurance Policy" onBack={() => router.back()} className="mb-4" />
 
@@ -162,5 +163,6 @@ export default function EditInsurance() {
       <Button onPress={save} label="Save" className="mt-2" />
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
