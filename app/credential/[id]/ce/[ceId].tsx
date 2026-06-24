@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
+import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getCe, updateCe, deleteCe } from '@/db/ce';
 import { FormField } from '@/components/FormField';
@@ -48,8 +50,8 @@ export default function EditCe() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      <Text className="text-2xl font-bold mb-4">Edit CE</Text>
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <Header title="Edit CE" onBack={() => router.back()} className="mb-4" />
       <FormField label="Course Name *" value={course} onChangeText={setCourse} />
       <FormField label="Organization" value={org} onChangeText={setOrg} />
       <DateField label="Date Completed *" value={date} onChange={setDate} />
@@ -57,12 +59,8 @@ export default function EditCe() {
       <FormField label="Category" value={category} onChangeText={setCategory} />
       <FormField label="Certificate #" value={certNum} onChangeText={setCertNum} />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
-      <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
-        <Text className="text-white font-semibold">Save</Text>
-      </Pressable>
-      <Pressable onPress={onDelete} className="bg-red-600 py-3 rounded-lg items-center mt-2">
-        <Text className="text-white font-semibold">Delete</Text>
-      </Pressable>
+      <Button onPress={save} label="Save" className="mt-2" />
+      <Button onPress={onDelete} label="Delete" variant="destructive" className="mt-2" />
     </ScrollView>
   );
 }

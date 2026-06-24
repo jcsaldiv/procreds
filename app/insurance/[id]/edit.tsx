@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system/legacy';
 import { getInsurance, updateInsurance } from '@/db/insurance';
@@ -105,23 +108,23 @@ export default function EditInsurance() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      <Text className="text-2xl font-bold mb-4">Edit Insurance Policy</Text>
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <Header title="Edit Insurance Policy" onBack={() => router.back()} className="mb-4" />
 
       <ScanButton
         type="insurance"
         onResult={(result, uri) => applyScannedFields(result as InsuranceScanResult, uri)}
       />
 
-      <Text className="text-sm font-medium text-gray-700 mb-1">Insurance Type *</Text>
-      <View className="border border-gray-300 rounded-lg mb-3 overflow-hidden">
+      <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Insurance Type *</Text>
+      <View className="border border-slate-300 dark:border-slate-600 rounded-lg mb-3 overflow-hidden">
         {INSURANCE_TYPES.map((t) => (
           <Pressable
             key={t}
             onPress={() => setInsuranceType(t)}
-            className={`p-3 border-b border-gray-100 ${insuranceType === t ? 'bg-blue-50' : ''}`}
+            className={`p-3 border-b border-slate-100 dark:border-slate-700 ${insuranceType === t ? 'bg-blue-50 dark:bg-blue-950' : ''}`}
           >
-            <Text className={insuranceType === t ? 'text-blue-600 font-semibold' : 'text-gray-800'}>{t}</Text>
+            <Text className={insuranceType === t ? 'text-blue-600 font-semibold' : 'text-slate-800 dark:text-slate-100'}>{t}</Text>
           </Pressable>
         ))}
       </View>
@@ -134,22 +137,26 @@ export default function EditInsurance() {
       <FormField label="Annual Premium" value={premiumAmount} onChangeText={setPremiumAmount} keyboardType="numeric" />
 
       <View className="flex-row items-center justify-between mb-3">
-        <Text className="text-sm font-medium text-gray-700">Auto Renew</Text>
+        <Text className="text-sm font-medium text-slate-700 dark:text-slate-300">Auto Renew</Text>
         <Switch value={autoRenew} onValueChange={setAutoRenew} />
       </View>
 
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
 
       {existingDocUri && !pendingImageUri ? (
-        <Text className="text-xs text-gray-500 mb-2">📎 Document attached</Text>
+        <View className="flex-row items-center gap-1 mb-2">
+          <Ionicons name="attach-outline" size={14} color="#64748b" />
+          <Text className="text-xs text-slate-500 dark:text-slate-400">Document attached</Text>
+        </View>
       ) : null}
       {pendingImageUri ? (
-        <Text className="text-xs text-blue-600 mb-2">📎 New document scanned — will prompt to attach on save</Text>
+        <View className="flex-row items-center gap-1 mb-2">
+          <Ionicons name="attach-outline" size={14} color="#2563eb" />
+          <Text className="text-xs text-blue-600">New document scanned — will prompt to attach on save</Text>
+        </View>
       ) : null}
 
-      <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
-        <Text className="text-white font-semibold text-base">Save</Text>
-      </Pressable>
+      <Button onPress={save} label="Save" className="mt-2" />
     </ScrollView>
   );
 }

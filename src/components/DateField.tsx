@@ -12,9 +12,9 @@ export function DateField(props: { label: string; value: string | null; onChange
   const date = props.value ? fromISO(props.value) : new Date();
   return (
     <View className="mb-4">
-      <Text className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{props.label}</Text>
-      <Pressable onPress={() => setShow(true)} className="border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-3 bg-white dark:bg-slate-800">
-        <Text className="text-base text-gray-900 dark:text-white">{props.value ? displayDate(props.value) : 'Tap to select'}</Text>
+      <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{props.label}</Text>
+      <Pressable onPress={() => setShow(true)} className="border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-3 bg-white dark:bg-slate-800">
+        <Text className="text-base text-slate-900 dark:text-white">{props.value ? displayDate(props.value) : 'Tap to select'}</Text>
       </Pressable>
       {props.value ? (
         <Pressable onPress={() => props.onChange(null)} className="mt-1">

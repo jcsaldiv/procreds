@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
+import { Button } from '@/components/Button';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { listCeForProfile, type CeCourse } from '@/db/ce';
@@ -21,9 +22,7 @@ export default function CeTab() {
     return (
       <View className="flex-1 items-center justify-center p-6 bg-white dark:bg-slate-900">
         <Text className="text-xl font-bold mb-2 text-slate-900 dark:text-white">CE tracking is a Pro feature</Text>
-        <Pressable onPress={() => router.push('/paywall')} className="bg-blue-600 px-4 py-2 rounded-lg mt-4">
-          <Text className="text-white font-semibold">Upgrade to Pro</Text>
-        </Pressable>
+        <Button onPress={() => router.push('/paywall')} label="Upgrade to Pro" size="md" className="mt-4" />
       </View>
     );
   }
@@ -33,7 +32,7 @@ export default function CeTab() {
     <View className="flex-1 bg-white dark:bg-slate-900">
       <View className="p-4">
         <Text className="text-2xl font-bold text-slate-900 dark:text-white">CE Hours</Text>
-        <Text className="text-gray-600 dark:text-slate-400 mt-1">Total: {total} hrs</Text>
+        <Text className="text-slate-600 dark:text-slate-400 mt-1">Total: {total} hrs</Text>
       </View>
       {rows.length === 0 ? (
         <EmptyState title="No CE logged yet" body="Open a credential and tap + Log CE." />

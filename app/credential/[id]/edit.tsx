@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
+import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getCredential, updateCredential } from '@/db/credentials';
 import { FormField } from '@/components/FormField';
@@ -49,8 +51,8 @@ export default function EditCredential() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4" contentContainerStyle={{ paddingBottom: 380 }}>
-      <Text className="text-2xl font-bold mb-4">Edit Credential</Text>
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 380 }}>
+      <Header title="Edit Credential" onBack={() => router.back()} className="mb-4" />
       <FormField label="Name *" value={name} onChangeText={setName} />
       <FormField label="Issuing Body" value={issuingBody} onChangeText={setIssuingBody} />
       <FormField label="Credential Number" value={credNum} onChangeText={setCredNum} />
@@ -58,12 +60,7 @@ export default function EditCredential() {
       <DateField label="Expiration Date" value={expDate} onChange={setExpDate} />
       <FormField label="Renewal URL" value={renewalUrl} onChangeText={setRenewalUrl} keyboardType="url" />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
-      <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
-        <Text className="text-white font-semibold text-base">Save</Text>
-      </Pressable>
-      <Pressable onPress={() => router.back()} className="py-3 rounded-lg items-center mt-2">
-        <Text className="text-gray-500 font-semibold text-base">Cancel</Text>
-      </Pressable>
+      <Button onPress={save} label="Save" className="mt-2" />
     </ScrollView>
   );
 }

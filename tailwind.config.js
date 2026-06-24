@@ -7,12 +7,16 @@ module.exports = {
     extend: {
       colors: {
         status: {
-          active: '#22C55E',
-          soon: '#EAB308',
-          expiring: '#F97316',
-          expired: '#EF4444',
-          none: '#6B7280',
+          active: '#15803D',
+          soon: '#B45309',
+          expiring: '#C2410C',
+          expired: '#B91C1C',
+          none: '#374151',
         },
+      },
+      fontSize: {
+        'heading': ['24px', { lineHeight: '32px', letterSpacing: '-0.3px' }],
+        'subheading': ['20px', { lineHeight: '28px', letterSpacing: '-0.2px' }],
       },
     },
   },

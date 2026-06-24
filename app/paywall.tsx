@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Button } from '@/components/Button';
 import { useRouter } from 'expo-router';
 import { getLifetimePackage, purchasePackageAndCheck, restoreAndCheck } from '@/purchases/revenuecat';
 
@@ -60,7 +62,7 @@ export default function Paywall() {
         <Text className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-4">Everything in Pro</Text>
         {FEATURES.map((f) => (
           <View key={f} className="flex-row items-start mb-3">
-            <Text className="text-blue-600 font-bold mr-3 mt-0.5">✓</Text>
+            <Ionicons name="checkmark-circle" size={18} color="#2563eb" style={{ marginRight: 12, marginTop: 2 }} />
             <Text className="text-slate-800 dark:text-slate-200 text-base flex-1">{f}</Text>
           </View>
         ))}
@@ -77,17 +79,7 @@ export default function Paywall() {
               <Text className="text-slate-500 dark:text-slate-400 text-sm">one-time</Text>
             </View>
             <Text className="text-slate-500 dark:text-slate-400 text-xs mb-4">No subscription. No renewals. Pay once, use forever.</Text>
-            <Pressable
-              onPress={buy}
-              disabled={buying}
-              className={`rounded-xl py-4 items-center ${buying ? 'bg-blue-300' : 'bg-blue-600'}`}
-            >
-              {buying ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <Text className="text-white font-bold text-base">Get Lifetime Access</Text>
-              )}
-            </Pressable>
+            <Button onPress={buy} label="Get Lifetime Access" loading={buying} disabled={buying} />
           </>
         ) : (
           <Text className="text-slate-500 dark:text-slate-400 text-sm text-center">Pricing unavailable. Try again later.</Text>

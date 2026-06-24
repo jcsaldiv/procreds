@@ -1,5 +1,9 @@
 import { useCallback, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
+import { LoadingState } from '@/components/LoadingState';
+import { EmptyState } from '@/components/EmptyState';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { getCredential, deleteCredential, type Credential } from '@/db/credentials';
 import { listCeForCredential, type CeCourse } from '@/db/ce';
@@ -19,15 +23,27 @@ export default function CredentialDetail() {
   const isPro = usePro();
   const [cred, setCred] = useState<Credential | null>(null);
   const [ces, setCes] = useState<CeCourse[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
     if (!id) return;
     setCred(getCredential(id));
     setCes(listCeForCredential(id));
+    setLoading(false);
   }, [id]);
   useFocusEffect(useCallback(() => { refresh(); }, [refresh]));
 
-  if (!cred) return null;
+  if (loading) return <LoadingState />;
+  if (!cred) {
+    return (
+      <View className="flex-1 bg-white dark:bg-slate-900">
+        <Pressable onPress={() => router.back()} className="p-4">
+          <Text className="text-blue-600 text-base">← Back</Text>
+        </Pressable>
+        <EmptyState title="Credential not found" body="It may have been deleted." />
+      </View>
+    );
+  }
   const status = calculateStatus(cred.expiration_date);
 
   const onDelete = async () => {
@@ -48,17 +64,11 @@ export default function CredentialDetail() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
-      <Pressable onPress={() => router.back()} className="flex-row items-center mb-3">
-        <Text className="text-blue-600 text-base">← Back</Text>
-      </Pressable>
-      <View className="flex-row justify-between items-start">
-        <Text className="text-2xl font-bold flex-1 pr-2 text-slate-900 dark:text-white">{cred.name}</Text>
-        <StatusBadge status={status} />
-      </View>
-      {cred.issuing_body ? <Text className="text-gray-600 dark:text-slate-400 mt-1">{cred.issuing_body}</Text> : null}
-      {cred.credential_number ? <Text className="text-gray-500 dark:text-slate-400 mt-1">#{cred.credential_number}</Text> : null}
-      {cred.issue_date ? <Text className="text-gray-700 dark:text-slate-300 mt-2">Issued: {fmtDate(cred.issue_date)}</Text> : null}
-      {cred.expiration_date ? <Text className="text-gray-700 dark:text-slate-300">Expires: {fmtDate(cred.expiration_date)}</Text> : null}
+      <Header title={cred.name} onBack={() => router.back()} right={<StatusBadge status={status} />} className="mb-2" />
+      {cred.issuing_body ? <Text className="text-slate-600 dark:text-slate-400 mt-1">{cred.issuing_body}</Text> : null}
+      {cred.credential_number ? <Text className="text-slate-500 dark:text-slate-400 mt-1">#{cred.credential_number}</Text> : null}
+      {cred.issue_date ? <Text className="text-slate-700 dark:text-slate-300 mt-2">Issued: {fmtDate(cred.issue_date)}</Text> : null}
+      {cred.expiration_date ? <Text className="text-slate-700 dark:text-slate-300">Expires: {fmtDate(cred.expiration_date)}</Text> : null}
       {cred.renewal_url ? (
         <Pressable
           onPress={() => {
@@ -70,23 +80,17 @@ export default function CredentialDetail() {
           <Text className="text-blue-600">Open renewal site</Text>
         </Pressable>
       ) : null}
-      {cred.notes ? <Text className="text-gray-700 dark:text-slate-300 mt-3">{cred.notes}</Text> : null}
+      {cred.notes ? <Text className="text-slate-700 dark:text-slate-300 mt-3">{cred.notes}</Text> : null}
 
       <View className="flex-row gap-3 mt-4">
-        <Pressable onPress={() => router.push(`/credential/${cred.id}/edit`)} className="flex-1 bg-gray-200 dark:bg-slate-700 py-2 rounded-lg items-center">
-          <Text className="font-semibold text-slate-900 dark:text-white">Edit</Text>
-        </Pressable>
-        <Pressable onPress={onDelete} className="flex-1 bg-red-600 py-2 rounded-lg items-center">
-          <Text className="text-white font-semibold">Delete</Text>
-        </Pressable>
+        <Button onPress={() => router.push(`/credential/${cred.id}/edit`)} label="Edit" variant="secondary" size="md" flex />
+        <Button onPress={onDelete} label="Delete" variant="destructive" size="md" flex />
       </View>
 
       <View className="mt-6 flex-row justify-between items-center">
         <Text className="text-xl font-bold text-slate-900 dark:text-white">CE Hours</Text>
         {isPro ? (
-          <Pressable onPress={() => router.push(`/credential/${cred.id}/ce/new`)} className="bg-blue-600 px-3 py-1 rounded-lg">
-            <Text className="text-white font-semibold">+ Log CE</Text>
-          </Pressable>
+          <Button onPress={() => router.push(`/credential/${cred.id}/ce/new`)} label="+ Log CE" size="sm" />
         ) : (
           <Pressable onPress={() => router.push('/paywall')}>
             <Text className="text-blue-600">Unlock CE (Pro)</Text>
@@ -96,7 +100,7 @@ export default function CredentialDetail() {
       {ces.map((c) => (
         <CeRow key={c.id} item={c} onPress={() => router.push(`/credential/${cred.id}/ce/${c.id}`)} />
       ))}
-      {ces.length === 0 ? <Text className="text-gray-500 dark:text-slate-500 mt-2">No CE logged yet.</Text> : null}
+      {ces.length === 0 ? <Text className="text-slate-500 dark:text-slate-500 mt-2">No CE logged yet.</Text> : null}
     </ScrollView>
   );
 }

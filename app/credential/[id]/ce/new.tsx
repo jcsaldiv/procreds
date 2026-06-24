@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
+import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { createCe } from '@/db/ce';
@@ -52,8 +54,8 @@ export default function NewCe() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      <Text className="text-2xl font-bold mb-4">Log CE</Text>
+    <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4">
+      <Header title="Log CE" onBack={() => router.back()} className="mb-4" />
       <ScanButton
         type="ce"
         onResult={(result) => applyScannedFields(result as CeScanResult)}
@@ -65,9 +67,7 @@ export default function NewCe() {
       <FormField label="Category" value={category} onChangeText={setCategory} />
       <FormField label="Certificate #" value={certNum} onChangeText={setCertNum} />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
-      <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
-        <Text className="text-white font-semibold">Save</Text>
-      </Pressable>
+      <Button onPress={save} label="Save" className="mt-2" />
     </ScrollView>
   );
 }

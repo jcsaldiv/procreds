@@ -174,7 +174,7 @@ export default function Settings() {
     <View className="flex-1 bg-slate-50 dark:bg-slate-950">
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <View className="px-5 pt-6 pb-4">
-          <Text className="text-3xl font-bold text-slate-900 dark:text-white">Settings</Text>
+          <Text className="text-2xl font-bold text-slate-900 dark:text-white">Settings</Text>
         </View>
 
         {/* Appearance */}
@@ -336,20 +336,20 @@ export default function Settings() {
         <Section title="Data">
           <TouchableOpacity
             onPress={confirmReset}
-            className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3"
+            className="rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950 px-4 py-3"
           >
-            <Text className="text-base font-semibold text-amber-700">Reset data</Text>
-            <Text className="mt-0.5 text-xs text-amber-600">
+            <Text className="text-base font-semibold text-amber-700 dark:text-amber-300">Reset data</Text>
+            <Text className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
               Clears all credentials and CE. Keeps profiles and settings.
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={confirmErase}
-            className="mt-3 rounded-xl border border-red-300 bg-red-50 px-4 py-3"
+            className="mt-3 rounded-xl border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950 px-4 py-3"
           >
-            <Text className="text-base font-semibold text-red-700">Erase everything</Text>
-            <Text className="mt-0.5 text-xs text-red-600">
+            <Text className="text-base font-semibold text-red-700 dark:text-red-300">Erase everything</Text>
+            <Text className="mt-0.5 text-xs text-red-600 dark:text-red-400">
               Deletes all data and resets the app to first-launch.
             </Text>
           </TouchableOpacity>

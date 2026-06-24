@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
+import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
 import { useRouter } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { createCredential, countCredentialsForProfile } from '@/db/credentials';
@@ -61,7 +63,7 @@ export default function NewCredential() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 380 }}>
-      <Text className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">New Credential</Text>
+      <Header title="New Credential" onBack={() => router.back()} className="mb-4" />
       <ScanButton
         type="credential"
         onResult={(result) => applyScannedFields(result as CredentialScanResult)}
@@ -73,12 +75,7 @@ export default function NewCredential() {
       <DateField label="Expiration Date" value={expDate} onChange={setExpDate} />
       <FormField label="Renewal URL" value={renewalUrl} onChangeText={setRenewalUrl} keyboardType="url" />
       <FormField label="Notes" value={notes} onChangeText={setNotes} multiline />
-      <Pressable onPress={save} className="bg-blue-600 py-3 rounded-lg items-center mt-2">
-        <Text className="text-white font-semibold text-base">Save</Text>
-      </Pressable>
-      <Pressable onPress={() => router.back()} className="py-3 rounded-lg items-center mt-2">
-        <Text className="text-gray-500 dark:text-slate-400 font-semibold text-base">Cancel</Text>
-      </Pressable>
+      <Button onPress={save} label="Save" className="mt-2" />
     </ScrollView>
   );
 }

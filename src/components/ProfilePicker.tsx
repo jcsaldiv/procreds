@@ -11,21 +11,21 @@ export function ProfilePicker() {
   const active = profiles.find((p) => p.id === activeProfileId);
   return (
     <View>
-      <Pressable onPress={() => setOpen(true)} className="px-3 py-2 bg-gray-100 dark:bg-slate-800 rounded-lg">
-        <Text className="text-sm font-medium text-gray-900 dark:text-white">{active?.name ?? 'Select profile'}</Text>
+      <Pressable onPress={() => setOpen(true)} className="px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
+        <Text className="text-sm font-medium text-slate-900 dark:text-white">{active?.name ?? 'Select profile'}</Text>
       </Pressable>
       <Modal visible={open} animationType="slide" onRequestClose={() => setOpen(false)}>
         <View className="flex-1 bg-white dark:bg-slate-900 p-4">
-          <Text className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Profiles</Text>
+          <Text className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Profiles</Text>
           <FlatList
             data={profiles}
             keyExtractor={(p) => p.id}
             renderItem={({ item }) => (
               <Pressable
-                className="p-4 border-b border-gray-200 dark:border-slate-700"
+                className="p-4 border-b border-slate-200 dark:border-slate-700"
                 onPress={() => { setActiveProfileId(item.id); setOpen(false); }}
               >
-                <Text className="text-base text-gray-900 dark:text-white">{item.name}</Text>
+                <Text className="text-base text-slate-900 dark:text-white">{item.name}</Text>
               </Pressable>
             )}
           />

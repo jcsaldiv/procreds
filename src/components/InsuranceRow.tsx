@@ -13,14 +13,14 @@ export function InsuranceRow(props: {
   return (
     <Pressable
       onPress={() => props.onPress(props.id)}
-      className="flex-row items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+      className="flex-row items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
     >
       <View className="flex-1">
-        <Text className="text-base font-semibold text-gray-900 dark:text-white">{props.insuranceType}</Text>
+        <Text className="text-base font-semibold text-slate-900 dark:text-white">{props.insuranceType}</Text>
         {props.carrier ? (
-          <Text className="text-xs text-gray-500 dark:text-slate-400">{props.carrier}</Text>
+          <Text className="text-xs text-slate-500 dark:text-slate-400">{props.carrier}</Text>
         ) : null}
-        <Text className="text-xs text-gray-400 dark:text-slate-500">
+        <Text className="text-xs text-slate-400 dark:text-slate-500">
           {props.expirationDate ? `Expires ${props.expirationDate}` : 'No expiration'}
         </Text>
       </View>

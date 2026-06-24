@@ -11,7 +11,7 @@ export function SummaryCard({
       style={{ backgroundColor: color + '22' }}
     >
       <Text className="text-5xl font-bold" style={{ color }}>{value}</Text>
-      <Text className="text-sm font-medium text-gray-700 mt-2">{label}</Text>
+      <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mt-2">{label}</Text>
     </Pressable>
   );
 }

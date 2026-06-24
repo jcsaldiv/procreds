@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, useColorScheme } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { format, parseISO, differenceInDays } from 'date-fns';
 import { useActiveProfile } from '@/state/activeProfile';
@@ -37,6 +38,7 @@ export default function Dashboard() {
   const router = useRouter();
   const { activeProfileId, hydrate } = useActiveProfile();
   const isPro = usePro();
+  const isDark = useColorScheme() === 'dark';
   const [counts, setCounts] = useState({ total: 0, expiring: 0, expired: 0 });
   const [insuranceCounts, setInsuranceCounts] = useState({ active: 0, expiring: 0 });
   const [upcoming, setUpcoming] = useState<UpcomingItem[]>([]);
@@ -150,7 +152,7 @@ export default function Dashboard() {
           className="flex-row items-center px-4 py-4 border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800"
         >
           <View className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 items-center justify-center mr-3">
-            <Text className="text-slate-600 dark:text-slate-300 text-base">📋</Text>
+            <Ionicons name="documents-outline" size={18} color={isDark ? '#94a3b8' : '#475569'} />
           </View>
           <View className="flex-1">
             <Text className="text-sm font-semibold text-slate-900 dark:text-white">View All Credentials</Text>
@@ -164,7 +166,7 @@ export default function Dashboard() {
             className="flex-row items-center px-4 py-4 active:bg-slate-50 dark:active:bg-slate-800"
           >
             <View className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900 items-center justify-center mr-3">
-              <Text className="text-blue-600 text-base">📤</Text>
+              <Ionicons name="share-outline" size={18} color="#2563eb" />
             </View>
             <View className="flex-1">
               <Text className="text-sm font-semibold text-slate-900 dark:text-white">Export PDF</Text>

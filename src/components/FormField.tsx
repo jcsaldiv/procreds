@@ -6,9 +6,9 @@ export function FormField(props: {
   const isDark = useColorScheme() === 'dark';
   return (
     <View className="mb-4">
-      <Text className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{props.label}</Text>
+      <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{props.label}</Text>
       <TextInput
-        className="border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-base text-gray-900 dark:text-white bg-white dark:bg-slate-800"
+        className="border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-base text-slate-900 dark:text-white bg-white dark:bg-slate-800"
         value={props.value}
         onChangeText={props.onChangeText}
         placeholder={props.placeholder}

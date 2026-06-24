@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
+import { Button } from '@/components/Button';
 import { useFocusEffect, useRouter, useLocalSearchParams } from 'expo-router';
 import { useActiveProfile } from '@/state/activeProfile';
 import { listCredentialsForProfile, type Credential } from '@/db/credentials';
@@ -40,7 +41,7 @@ export default function CredentialsList() {
         <View>
           <Text className="text-2xl font-bold text-slate-900 dark:text-white">Credentials</Text>
           {filter ? (
-            <Pressable onPress={() => router.setParams({ filter: '' })} className="flex-row items-center mt-0.5">
+            <Pressable onPress={() => router.setParams({ filter: '' })} hitSlop={12} className="flex-row items-center mt-0.5 py-1">
               <Text className="text-xs text-blue-600">
                 {FILTER_LABELS[filter] ?? filter} ✕ clear filter
               </Text>
@@ -49,19 +50,9 @@ export default function CredentialsList() {
         </View>
         <View className="flex-row gap-2">
           {isPro && (
-            <Pressable
-              onPress={() => router.push('/export')}
-              className="border border-blue-600 px-3 py-2 rounded-lg"
-            >
-              <Text className="text-blue-600 font-semibold">Export</Text>
-            </Pressable>
+            <Button onPress={() => router.push('/export')} label="Export" variant="outline" size="md" />
           )}
-          <Pressable
-            onPress={() => router.push('/credential/new')}
-            className="bg-blue-600 px-4 py-2 rounded-lg"
-          >
-            <Text className="text-white font-semibold">+ Add</Text>
-          </Pressable>
+          <Button onPress={() => router.push('/credential/new')} label="+ Add" size="md" />
         </View>
       </View>
       {filtered.length === 0 ? (

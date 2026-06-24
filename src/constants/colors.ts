@@ -1,10 +1,10 @@
 import type { CredentialStatus } from '../domain/status';
 export const STATUS_COLORS: Record<CredentialStatus, string> = {
-  active: '#22C55E',
-  'expiring-soon': '#EAB308',
-  expiring: '#F97316',
-  expired: '#EF4444',
-  'no-expiration': '#6B7280',
+  active: '#15803D',
+  'expiring-soon': '#B45309',
+  expiring: '#C2410C',
+  expired: '#B91C1C',
+  'no-expiration': '#374151',
 };
 export const STATUS_LABELS: Record<CredentialStatus, string> = {
   active: 'Active',
