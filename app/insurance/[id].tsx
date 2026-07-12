@@ -36,7 +36,7 @@ export default function InsuranceDetail() {
         <View className="p-4">
           <Header title="Policy not found" onBack={() => router.back()} />
         </View>
-        <EmptyState body="It may have been deleted." />
+        <EmptyState title="Policy not found" body="It may have been deleted." />
       </View>
     );
   }

@@ -9,6 +9,6 @@ export function useIsTablet() {
 export function useTabletStyle() {
   const isTablet = useIsTablet();
   return isTablet
-    ? ({ maxWidth: TABLET_MAX_WIDTH, alignSelf: 'center' as const, width: '100%' })
+    ? ({ maxWidth: TABLET_MAX_WIDTH, alignSelf: 'center' as const, width: '100%' as const })
     : undefined;
 }
