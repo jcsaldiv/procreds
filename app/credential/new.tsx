@@ -68,10 +68,19 @@ export default function NewCredential() {
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-4" contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <View style={tabletStyle}>
       <Header title="New Credential" onBack={() => router.back()} className="mb-4" />
-      <ScanButton
-        type="credential"
-        onResult={(result) => applyScannedFields(result as CredentialScanResult)}
-      />
+      {isPro ? (
+        <ScanButton
+          type="credential"
+          onResult={(result) => applyScannedFields(result as CredentialScanResult)}
+        />
+      ) : (
+        <Button
+          onPress={() => router.push('/paywall')}
+          label="🔒 Scan Document (Pro)"
+          variant="outline"
+          className="mb-4"
+        />
+      )}
       <FormField label="Name *" value={name} onChangeText={setName} placeholder="e.g. RN License" />
       <FormField label="Issuing Body" value={issuingBody} onChangeText={setIssuingBody} />
       <FormField label="Credential Number" value={credNum} onChangeText={setCredNum} />
